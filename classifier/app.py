@@ -1,4 +1,3 @@
-
 import numpy as np
 from flask import Flask, request, render_template
 import pickle
@@ -6,6 +5,7 @@ import librosa
 import pandas as pd
 import catboost as cb
 import xgboost as xgb
+
 
 
 
@@ -174,8 +174,8 @@ def predict():
                 mfcc_names.append(mfcc_str)
 
             
-            scaler = pickle.load(open('classifier/pickle/scalar.pkl', 'rb'))
-            X_train = pickle.load(open('classifier/pickle/xtrain.pkl', 'rb'))
+            scaler = pickle.load(open('/home/rayen/Desktop/Music-genre-classifier-main/classifier/pickle/scalar.pkl', 'rb'))
+            X_train = pickle.load(open('/home/rayen/Desktop/Music-genre-classifier-main/classifier/pickle/xtrain.pkl', 'rb'))
             perm_features = ['spectral_centroid_mean', 'spectral_bandwidth_mean', 'mfcc1_mean', 'rolloff_mean', 'zero_crossing_rate_mean', 'perceptr_var', 'mfcc3_mean', 'rms_mean', 'chroma_stft_mean', 'mfcc2_mean', 'mfcc4_mean', 'mfcc9_mean', 'spectral_centroid_var', 'mfcc6_mean', 'rms_var', 'mfcc17_mean', 'spectral_bandwidth_var', 'mfcc11_mean', 'zero_crossing_rate_var', 'mfcc7_mean', 'mfcc5_mean', 'mfcc8_mean', 'mfcc10_mean', 'mfcc12_mean', 'rolloff_var', 'mfcc13_mean', 'mfcc3_var', 'mfcc18_mean', 'mfcc5_var', 'chroma_stft_var']
             test_frame = pd.DataFrame([test_data], columns = mfcc_names)
             testing_frame = pd.DataFrame(scaler.transform(test_frame), columns=X_train.columns)
@@ -326,6 +326,8 @@ def predict():
                     
         
             cbc = pickle.load(open('classifier/pickle/cbc.pkl', 'rb'))
+
+            svm = pickle.load(open('classifier/pickle/SVM.pkl', 'rb'))
             xgbc = pickle.load(open('classifier/pickle/cbc.pkl', 'rb'))
             #change xgbc later
             gbc = pickle.load(open('classifier/pickle/gbc.pkl', 'rb'))
@@ -337,7 +339,7 @@ def predict():
             #Testing Input Data
             #from collections import Counter
             result=[]
-            models = {'Catboost':cbc, 'XGBoost':xgbc, 'Gradient Boosting':gbc, 'AdaBoost':abc,  'Linear Regression':lr, 'KNN':cls} #'Random Forest':rfc,
+            models = {'Catboost':cbc, 'XGBoost':xgbc, 'Gradient Boosting':gbc,'SVM' : svm, 'AdaBoost':abc,  'Linear Regression':lr, 'KNN':cls} #'Random Forest':rfc,
             key_list = list(models.keys())
             val_list = list(models.values())
 
